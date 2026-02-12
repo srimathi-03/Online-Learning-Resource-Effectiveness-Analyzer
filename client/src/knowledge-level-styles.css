@@ -1,0 +1,295 @@
+/* Knowledge Level Selection Styles */
+.knowledge-level-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.level-selection-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.level-card {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.level-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px -4px rgba(0, 0, 0, 0.15);
+}
+
+.level-card.basic-card:hover {
+    border-color: #10B981;
+}
+
+.level-card.intermediate-card:hover {
+    border-color: #F59E0B;
+}
+
+.level-icon-wrapper {
+    width: 64px;
+    height: 64px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.level-icon-wrapper.basic {
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    color: white;
+}
+
+.level-icon-wrapper.intermediate {
+    background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+    color: white;
+}
+
+.level-card h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    color: #1F2937;
+}
+
+.level-description {
+    color: #6B7280;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.level-features {
+    list-style: none;
+    margin-bottom: 2rem;
+}
+
+.level-features li {
+    padding: 0.5rem 0;
+    color: #4B5563;
+    font-size: 0.95rem;
+}
+
+.level-btn {
+    width: 100%;
+    padding: 0.875rem 1.5rem;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
+}
+
+.basic-btn {
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    color: white;
+}
+
+.basic-btn:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.intermediate-btn {
+    background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+    color: white;
+}
+
+.intermediate-btn:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.level-info-box {
+    background: #EEF2FF;
+    border-left: 4px solid #4F46E5;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    margin-top: 2rem;
+}
+
+.level-info-box p {
+    color: #4B5563;
+    margin: 0;
+}
+
+/* Pre-Test Results Styles */
+.pretest-results-container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+}
+
+.results-card {
+    background: white;
+    border-radius: 16px;
+    padding: 3rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.results-icon {
+    margin: 0 auto 2rem;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.results-icon.success {
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    color: white;
+}
+
+.results-icon.warning {
+    background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+    color: white;
+}
+
+.results-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: #1F2937;
+}
+
+.score-display {
+    margin: 2rem 0;
+}
+
+.score-circle {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4F46E5 0%, #6366F1 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    box-shadow: 0 8px 16px rgba(79, 70, 229, 0.3);
+}
+
+.score-number {
+    font-size: 3rem;
+    font-weight: 700;
+    color: white;
+}
+
+.score-label {
+    color: #6B7280;
+    font-size: 1rem;
+}
+
+.threshold-info {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: #F9FAFB;
+    border-radius: 8px;
+}
+
+.threshold-text {
+    color: #4B5563;
+    margin: 0;
+}
+
+.result-message {
+    display: flex;
+    gap: 1rem;
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin: 2rem 0;
+    text-align: left;
+}
+
+.result-message.success-message {
+    background: #ECFDF5;
+    border: 1px solid #10B981;
+}
+
+.result-message.info-message {
+    background: #FEF3C7;
+    border: 1px solid #F59E0B;
+}
+
+.result-message h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.125rem;
+    color: #1F2937;
+}
+
+.result-message p {
+    margin: 0;
+    color: #4B5563;
+    line-height: 1.6;
+}
+
+.content-access-info {
+    margin: 2rem 0;
+}
+
+.access-label {
+    color: #6B7280;
+    font-size: 0.875rem;
+    margin-bottom: 0.75rem;
+}
+
+.access-badge {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1.125rem;
+}
+
+.access-badge.advanced {
+    background: linear-gradient(135deg, #4F46E5 0%, #6366F1 100%);
+    color: white;
+}
+
+.access-badge.basic {
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    color: white;
+}
+
+.continue-btn {
+    margin-top: 2rem;
+    padding: 1rem 2rem;
+    font-size: 1.125rem;
+}
+
+/* Level Badge in Materials */
+.level-badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.level-badge.basic {
+    background: #ECFDF5;
+    color: #059669;
+    border: 1px solid #10B981;
+}
+
+.level-badge.advanced {
+    background: #EEF2FF;
+    color: #4338CA;
+    border: 1px solid #4F46E5;
+}
