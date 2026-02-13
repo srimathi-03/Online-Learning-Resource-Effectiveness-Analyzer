@@ -6,10 +6,9 @@ A comprehensive Learning Management System built with the MERN stack.
 
 **Frontend**: React.js
 **UI Styling**: HTML5, CSS3
-**API**: Axios (REST API)
+**API**: REST API
 **Backend**: Node.js + Express.js (Framework)
 **Database**: MongoDB
-**Authentication**: JSON Web Token (JWT)
 
 ## ARCHITECTURE
 
