@@ -12,7 +12,7 @@ const courseSchema = new mongoose.Schema({
         url: String,
         duration: String,
         rating: Number,
-        level: { type: String, enum: ['basic', 'advanced'], default: 'basic' }
+        level: { type: String, enum: ['basic', 'intermediate', 'advanced'], default: 'basic' }
     }],
     preTestQuestions: [{
         question: String,

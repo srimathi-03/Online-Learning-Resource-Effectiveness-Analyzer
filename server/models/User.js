@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
         preTestScore: { type: Number },
         postTestScore: { type: Number },
         preTestPassed: { type: Boolean, default: false },
-        allowedContentLevel: { type: String, enum: ['basic', 'advanced'], default: 'basic' },
+        allowedContentLevel: { type: String, enum: ['basic', 'intermediate', 'advanced'], default: 'basic' },
         topicScores: { type: Map, of: Object }, // Structure: { "JavaScript": { pre: 20, post: 80 }, ... }
         lastAccessed: { type: Date, default: Date.now }
     }],

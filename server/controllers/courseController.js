@@ -75,15 +75,18 @@ exports.selectKnowledgeLevel = async (req, res) => {
 
         const progressIndex = user.progress.findIndex(p => p.courseId === courseId);
 
+        // Determine allowed content level (initially same as knowledge level)
+        const allowedLevel = knowledgeLevel;
+
         if (progressIndex > -1) {
             user.progress[progressIndex].knowledgeLevel = knowledgeLevel;
-            user.progress[progressIndex].allowedContentLevel = knowledgeLevel === 'basic' ? 'basic' : 'basic';
+            user.progress[progressIndex].allowedContentLevel = allowedLevel;
             user.progress[progressIndex].status = knowledgeLevel === 'basic' ? 'In Progress' : 'Pre-Test Required';
         } else {
             user.progress.push({
                 courseId,
                 knowledgeLevel,
-                allowedContentLevel: knowledgeLevel === 'basic' ? 'basic' : 'basic',
+                allowedContentLevel: allowedLevel,
                 status: knowledgeLevel === 'basic' ? 'In Progress' : 'Pre-Test Required'
             });
         }
@@ -110,14 +113,34 @@ exports.getMaterialsByLevel = async (req, res) => {
         const userProgress = user.progress.find(p => p.courseId === courseId);
         const allowedLevel = userProgress?.allowedContentLevel || 'basic';
 
-        // Filter materials based on allowed level
-        const filteredMaterials = course.materials.filter(m => m.level === allowedLevel);
+        // Helper for level hierarchy
+        const levels = ['basic', 'intermediate', 'advanced'];
+        const userLevelIndex = levels.indexOf(allowedLevel);
+
+        console.log(`[DEBUG] Fetch Materials - User Level: ${allowedLevel}, Index: ${userLevelIndex}`);
+
+        // Filter materials: Show materials up to the allowed level
+        const filteredMaterials = course.materials.filter(m => {
+            if (!m.level) return true; // Show unlabelled materials
+            return levels.indexOf(m.level) <= userLevelIndex;
+        });
+
+        console.log(`[DEBUG] Materials Found: ${course.materials.length}, Returning: ${filteredMaterials.length}`);
 
         res.json({
             materials: filteredMaterials,
             allowedLevel,
             knowledgeLevel: userProgress?.knowledgeLevel
         });
+    } catch (err) {
+        res.status(500).json({ message: 'Server error', error: err.message });
+    }
+};
+exports.deleteCourse = async (req, res) => {
+    try {
+        const course = await Course.findByIdAndDelete(req.params.id);
+        if (!course) return res.status(404).json({ message: 'Course not found' });
+        res.json({ message: 'Course deleted successfully' });
     } catch (err) {
         res.status(500).json({ message: 'Server error', error: err.message });
     }

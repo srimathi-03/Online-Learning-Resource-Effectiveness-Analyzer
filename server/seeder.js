@@ -176,12 +176,13 @@ const generateQuestionsSet = (qKey, type) => {
     }));
 };
 
-const commonMaterials = [
-    { type: 'youtube', title: 'Getting Started Video', url: 'https://www.youtube.com/watch?v=rfscVS0CQDX', duration: '12:45', rating: 4.8 },
-    { type: 'website', title: 'Official Documentation', url: 'https://docs.microsoft.com', duration: 'Self-paced', rating: 4.9 },
-    { type: 'pdf', title: 'Cheatsheet Guide (PDF)', url: 'https://cheatsheet.com/guide.pdf', duration: '10 pages', rating: 4.7 },
-    { type: 'coursera', title: 'Foundations Course', url: 'https://www.coursera.org', duration: '6 weeks', rating: 4.9 },
-    { type: 'udemy', title: 'Complete Bootcamp', url: 'https://www.udemy.com', duration: '40 hours', rating: 4.8 }
+const tieredMaterials = [
+    { level: 'basic', type: 'youtube', title: 'Getting Started Video', url: 'https://www.youtube.com/watch?v=rfscVS0CQDX', duration: '12:45', rating: 4.8 },
+    { level: 'basic', type: 'website', title: 'Official Documentation (Basic)', url: 'https://docs.microsoft.com', duration: 'Self-paced', rating: 4.9 },
+    { level: 'intermediate', type: 'pdf', title: 'Deep Dive Guide (PDF)', url: 'https://cheatsheet.com/guide.pdf', duration: '15 pages', rating: 4.7 },
+    { level: 'intermediate', type: 'coursera', title: 'Intermediate Concepts', url: 'https://www.coursera.org', duration: '4 weeks', rating: 4.8 },
+    { level: 'advanced', type: 'udemy', title: 'Advanced Masterclass', url: 'https://www.udemy.com', duration: '40 hours', rating: 4.9 },
+    { level: 'advanced', type: 'youtube', title: 'Expert Architecture Patterns', url: 'https://youtube.com', duration: '1:30:00', rating: 5.0 }
 ];
 
 const seed = async () => {
@@ -215,7 +216,7 @@ const seed = async () => {
             tags: tpl.tags,
             duration: '30 hours',
             totalQuestions: 20,
-            materials: commonMaterials.map(m => ({ ...m, title: `${tpl.title} - ${m.title}` })),
+            materials: tieredMaterials.map(m => ({ ...m, title: `${tpl.title} - ${m.title}` })),
             preTestQuestions: generateQuestionsSet(tpl.qKey, 'pre'),
             postTestQuestions: generateQuestionsSet(tpl.qKey, 'post'),
             recommendations: [

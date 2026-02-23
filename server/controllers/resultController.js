@@ -14,13 +14,21 @@ exports.updateProgress = async (req, res) => {
             if (preTestScore !== undefined) {
                 currentProgress.preTestScore = preTestScore;
 
-                // Check threshold for intermediate users (70%)
-                if (currentProgress.knowledgeLevel === 'intermediate') {
-                    const threshold = 70;
-                    currentProgress.preTestPassed = preTestScore >= threshold;
-                    currentProgress.allowedContentLevel = preTestScore >= threshold ? 'advanced' : 'basic';
-                    currentProgress.status = 'In Progress';
+                // Dynamic Difficulty Logic
+                console.log(`[DEBUG] Update Progress - Score: ${preTestScore}`);
+                if (preTestScore >= 80) {
+                    currentProgress.allowedContentLevel = 'advanced';
+                    currentProgress.preTestPassed = true;
+                } else if (preTestScore >= 50) {
+                    currentProgress.allowedContentLevel = 'intermediate';
+                    currentProgress.preTestPassed = true;
+                } else {
+                    currentProgress.allowedContentLevel = 'basic';
+                    currentProgress.preTestPassed = false;
                 }
+                console.log(`[DEBUG] Updated Level: ${currentProgress.allowedContentLevel}`);
+
+                currentProgress.status = 'In Progress';
             }
 
             if (postTestScore !== undefined) currentProgress.postTestScore = postTestScore;
@@ -28,11 +36,28 @@ exports.updateProgress = async (req, res) => {
             if (status) currentProgress.status = status;
             currentProgress.lastAccessed = Date.now();
         } else {
+            let allowedContentLevel = 'basic';
+            let preTestPassed = false;
+
+            if (preTestScore !== undefined) {
+                console.log(`[DEBUG] New Progress - Score: ${preTestScore}`);
+                if (preTestScore >= 80) {
+                    allowedContentLevel = 'advanced';
+                    preTestPassed = true;
+                } else if (preTestScore >= 50) {
+                    allowedContentLevel = 'intermediate';
+                    preTestPassed = true;
+                }
+                console.log(`[DEBUG] Assigned Level: ${allowedContentLevel}`);
+            }
+
             user.progress.push({
                 courseId,
                 status: status || 'In Progress',
                 preTestScore,
                 postTestScore,
+                allowedContentLevel,
+                preTestPassed,
                 topicScores: req.body.topicScores || {}
             });
         }
@@ -56,7 +81,7 @@ exports.getUserProgress = async (req, res) => {
 };
 exports.getAllUsersProgress = async (req, res) => {
     try {
-        const users = await User.find({}, 'fullName email progress');
+        const users = await User.find({}, 'fullName email role progress');
         res.json(users);
     } catch (err) {
         res.status(500).json({ message: 'Server error', error: err.message });
