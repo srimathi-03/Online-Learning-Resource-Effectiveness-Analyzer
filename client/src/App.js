@@ -14,9 +14,11 @@ import PreTestResults from './pages/learner/PreTestResults';
 import Materials from './pages/learner/Materials';
 import PostTest from './pages/learner/PostTest';
 import Results from './pages/learner/Results';
+import AllRecommendations from './pages/learner/AllRecommendations';
 import Auth from './pages/Auth';
 import Assessment from './pages/learner/Assessment';
 import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminCourseList from './pages/admin/AdminCourseList';
 import AdminCreateAssessment from './pages/admin/AdminCreateAssessment';
 import AdminAddMaterial from './pages/admin/AdminAddMaterial';
 import AdminCreateCourse from './pages/admin/AdminCreateCourse';
@@ -41,11 +43,11 @@ function App() {
         <Route path="/auth" element={<Auth />} />
 
         {/* Dashboard Routes with Sidebar */}
-        {/* Dashboard Routes with Sidebar */}
         <Route element={<DashboardLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/courses" element={<Courses />} />
           <Route path="/select-level" element={<KnowledgeLevelSelection />} />
+          <Route path="/recommendations" element={<AllRecommendations />} />
           <Route path="/pre-test" element={<PreTest />} />
           <Route path="/pre-test-results" element={<PreTestResults />} />
           <Route path="/assessment" element={<Assessment />} />
@@ -57,6 +59,7 @@ function App() {
           {/* Admin Routes */}
           <Route element={<RequireAdmin />}>
             <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/courses" element={<AdminCourseList />} />
             <Route path="/admin/create-course" element={<AdminCreateCourse />} />
             <Route path="/admin/add-material" element={<AdminAddMaterial />} />
             <Route path="/admin/create-assessment" element={<AdminCreateAssessment />} />

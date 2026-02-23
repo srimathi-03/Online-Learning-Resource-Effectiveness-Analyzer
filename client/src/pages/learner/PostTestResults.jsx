@@ -12,6 +12,9 @@ const PostTestResults = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
+    // Rename destructured variables to avoid conflict with top-level state
+    const { questions: stateQuestions, userAnswers: stateUserAnswers, score: passedScore } = location.state || {};
+
     useEffect(() => {
         const fetchProgress = async () => {
             try {
@@ -25,17 +28,19 @@ const PostTestResults = () => {
             }
         };
 
-        if (user.id && courseId) fetchProgress();
-    }, [user.id, courseId]);
+        // Only fetch progress if we don't have the score in state
+        if (user.id && courseId && passedScore === undefined) fetchProgress();
+        else if (passedScore !== undefined) setLoading(false);
+    }, [user.id, courseId, passedScore]);
 
     const handleContinue = () => {
         navigate(`/results?courseId=${courseId}`);
     };
 
     if (loading) return <div className="loading-state">Loading your results...</div>;
-    if (!progress) return <div className="error-state">No test results found</div>;
+    if (!progress && passedScore === undefined) return <div className="error-state">No test results found</div>;
 
-    const { questions, userAnswers, score: passedScore } = location.state || {};
+
 
     const score = passedScore !== undefined ? passedScore : (progress?.postTestScore || 0);
     const preScore = progress?.preTestScore || 0;
@@ -78,11 +83,12 @@ const PostTestResults = () => {
                 </div>
 
                 {/* Answer Review Section */}
-                {questions && userAnswers && (
+                {stateQuestions && stateUserAnswers && (
                     <div className="answers-review-section" style={{ marginTop: '3rem', textAlign: 'left' }}>
                         <h2 style={{ marginBottom: '1.5rem', borderBottom: '1px solid #E5E7EB', paddingBottom: '0.5rem' }}>Detailed Answer Review</h2>
-                        {questions.map((q, idx) => {
-                            const userAnswerIdx = userAnswers[idx];
+                        {stateQuestions.map((q, idx) => {
+                            const answerKey = q._id || idx;
+                            const userAnswerIdx = stateUserAnswers[answerKey];
                             const isCorrect = userAnswerIdx === q.correctAnswer;
 
                             return (

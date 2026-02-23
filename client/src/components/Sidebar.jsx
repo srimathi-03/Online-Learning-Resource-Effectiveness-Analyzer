@@ -21,6 +21,7 @@ const Sidebar = () => {
         { icon: <Book size={20} />, label: 'Create Course', path: '/admin/create-course' },
         { icon: <BookOpen size={20} />, label: 'Add Material', path: '/admin/add-material' },
         { icon: <FileText size={20} />, label: 'Create Assessment', path: '/admin/create-assessment' },
+        { icon: <BookOpen size={20} />, label: 'Manage Courses', path: '/admin/courses' },
     ];
 
     const learnerItems = [
@@ -42,6 +43,7 @@ const Sidebar = () => {
                     <NavLink
                         key={item.path}
                         to={item.path}
+                        end={item.path === '/admin' || item.path === '/dashboard'}
                         className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}
                     >
                         {item.icon}

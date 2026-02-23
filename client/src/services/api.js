@@ -40,6 +40,12 @@ const api = {
         });
         return res.json();
     },
+    deleteCourse: async (id) => {
+        const res = await fetch(`${API_BASE_URL}/courses/${id}`, {
+            method: 'DELETE'
+        });
+        return res.json();
+    },
 
     // Knowledge Level System
     selectKnowledgeLevel: async (courseId, userId, knowledgeLevel) => {

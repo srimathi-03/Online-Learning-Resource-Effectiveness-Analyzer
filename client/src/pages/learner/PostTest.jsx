@@ -81,7 +81,7 @@ const PostTest = () => {
                             <span className="dot">•</span>
                             <span className="t-est">~15 mins</span>
                         </div>
-                        <Link to={`/assessment?courseId=${course._id}&type=post`} className="btn-start-test-neon">
+                        <Link to={`/assessment?courseId=${course._id}&type=post&difficulty=${difficulty.toLowerCase()}`} className="btn-start-test-neon">
                             Launch Assessment <ChevronRight size={20} />
                         </Link>
                     </div>

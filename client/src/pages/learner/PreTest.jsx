@@ -79,7 +79,7 @@ const PreTest = () => {
                         <span className="stat-label">Questions available</span>
                         <span className="stat-number">{course.totalQuestions}</span>
                     </div>
-                    <Link to={`/assessment?courseId=${course._id}&type=pre`} className="btn-primary-start-test">
+                    <Link to={`/assessment?courseId=${course._id}&type=pre&difficulty=${difficulty.toLowerCase()}`} className="btn-primary-start-test">
                         Start Test <ChevronRight size={18} />
                     </Link>
                 </div>

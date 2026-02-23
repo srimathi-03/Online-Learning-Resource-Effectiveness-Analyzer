@@ -11,25 +11,26 @@ const AdminDashboard = () => {
         totalTests: 0
     });
     const [progressData, setProgressData] = useState([]);
+    const [learnerData, setLearnerData] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [courses, analytics] = await Promise.all([
-                    api.getCourses(),
-                    api.getSystemAnalytics()
+                const [analytics, users] = await Promise.all([
+                    api.getSystemAnalytics(),
+                    api.getAllProgress() // Fetch all users with progress
                 ]);
 
                 // Use real analytics from backend
                 setStats({
                     totalLearners: analytics.totalLearners || 0,
                     avgImprovement: analytics.avgImprovement || 0,
-                    totalResources: courses.reduce((acc, c) => acc + (c.materials?.length || 0), 0),
+                    totalResources: analytics.totalResources || 0, // Backend doesn't send this yet, strictly, but let's leave it
                     totalTests: analytics.totalTests || 0
                 });
 
-                // Mock trend data (backend doesn't provide time-series yet, so keeping this visual only)
+                // Mock trend data (backend doesn't provide time-series yet)
                 const trendData = [
                     { name: 'Jan', value: 15 },
                     { name: 'Feb', value: 18 },
@@ -39,6 +40,58 @@ const AdminDashboard = () => {
                     { name: 'Jun', value: 32 },
                 ];
                 setProgressData(trendData);
+
+                // Process Learner Data
+                const processedLearners = users.filter(u => u.role === 'learner').map(user => {
+                    const progress = user.progress || [];
+                    let totalPre = 0, countPre = 0;
+                    let totalPost = 0, countPost = 0;
+                    let totalImp = 0, countImp = 0;
+                    let totalTests = 0;
+                    let lastActive = 0;
+
+                    progress.forEach(p => {
+                        if (p.preTestScore !== undefined) {
+                            totalPre += p.preTestScore;
+                            countPre++;
+                            totalTests++;
+                        }
+                        if (p.postTestScore !== undefined) {
+                            totalPost += p.postTestScore;
+                            countPost++;
+                            totalTests++;
+
+                            // Calculate improvement for this course
+                            if (p.preTestScore !== undefined) {
+                                totalImp += (p.postTestScore - p.preTestScore);
+                                countImp++;
+                            }
+                        }
+                        const pDate = new Date(p.lastAccessed).getTime();
+                        if (pDate > lastActive) lastActive = pDate;
+                    });
+
+                    const avgPre = countPre ? Math.round(totalPre / countPre) : 0;
+                    const avgPost = countPost ? Math.round(totalPost / countPost) : 0;
+                    const avgImp = countImp ? Math.round(totalImp / countImp) : 0;
+
+                    // Active if accessed in last 30 days
+                    const daysSinceActive = (Date.now() - lastActive) / (1000 * 60 * 60 * 24);
+                    const status = (countPre > 0 && daysSinceActive <= 30) ? 'active' : 'inactive';
+
+                    return {
+                        id: user._id,
+                        name: user.fullName,
+                        preTestAvg: countPre > 0 ? `${avgPre}%` : '-',
+                        postTestAvg: countPost > 0 ? `${avgPost}%` : '-',
+                        improvement: countImp > 0 ? `${avgImp > 0 ? '+' : ''}${avgImp}%` : '-',
+                        tests: totalTests,
+                        status: status
+                    };
+                });
+
+                setLearnerData(processedLearners);
+
             } catch (err) {
                 console.error('Failed to fetch admin stats', err);
             } finally {
@@ -151,6 +204,7 @@ const AdminDashboard = () => {
                 </div>
             </div>
 
+
             <div className="info-card">
                 <h3>Learner Performance</h3>
                 <div className="table-responsive" style={{ overflowX: 'auto' }}>
@@ -166,51 +220,40 @@ const AdminDashboard = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr style={{ borderBottom: '1px solid #F3F4F6' }}>
-                                <td style={{ padding: '1rem 0.75rem', fontWeight: '500' }}>Alice Johnson</td>
-                                <td style={{ padding: '1rem 0.75rem' }}>45%</td>
-                                <td style={{ padding: '1rem 0.75rem' }}>78%</td>
-                                <td style={{ padding: '1rem 0.75rem', color: '#10B981', fontWeight: '600' }}>+33%</td>
-                                <td style={{ padding: '1rem 0.75rem' }}>5</td>
-                                <td style={{ padding: '1rem 0.75rem' }}><span style={{ background: '#EEF2FF', color: '#4F46E5', padding: '0.25rem 0.5rem', borderRadius: '99px', fontSize: '0.75rem', fontWeight: '600' }}>active</span></td>
-                            </tr>
-                            <tr style={{ borderBottom: '1px solid #F3F4F6' }}>
-                                <td style={{ padding: '1rem 0.75rem', fontWeight: '500' }}>Bob Smith</td>
-                                <td style={{ padding: '1rem 0.75rem' }}>55%</td>
-                                <td style={{ padding: '1rem 0.75rem' }}>80%</td>
-                                <td style={{ padding: '1rem 0.75rem', color: '#10B981', fontWeight: '600' }}>+25%</td>
-                                <td style={{ padding: '1rem 0.75rem' }}>4</td>
-                                <td style={{ padding: '1rem 0.75rem' }}><span style={{ background: '#EEF2FF', color: '#4F46E5', padding: '0.25rem 0.5rem', borderRadius: '99px', fontSize: '0.75rem', fontWeight: '600' }}>active</span></td>
-                            </tr>
-                            <tr style={{ borderBottom: '1px solid #F3F4F6' }}>
-                                <td style={{ padding: '1rem 0.75rem', fontWeight: '500' }}>Carol Davis</td>
-                                <td style={{ padding: '1rem 0.75rem' }}>38%</td>
-                                <td style={{ padding: '1rem 0.75rem' }}>72%</td>
-                                <td style={{ padding: '1rem 0.75rem', color: '#10B981', fontWeight: '600' }}>+34%</td>
-                                <td style={{ padding: '1rem 0.75rem' }}>6</td>
-                                <td style={{ padding: '1rem 0.75rem' }}><span style={{ background: '#EEF2FF', color: '#4F46E5', padding: '0.25rem 0.5rem', borderRadius: '99px', fontSize: '0.75rem', fontWeight: '600' }}>active</span></td>
-                            </tr>
-                            <tr style={{ borderBottom: '1px solid #F3F4F6' }}>
-                                <td style={{ padding: '1rem 0.75rem', fontWeight: '500' }}>David Lee</td>
-                                <td style={{ padding: '1rem 0.75rem' }}>60%</td>
-                                <td style={{ padding: '1rem 0.75rem' }}>75%</td>
-                                <td style={{ padding: '1rem 0.75rem', color: '#10B981', fontWeight: '600' }}>+15%</td>
-                                <td style={{ padding: '1rem 0.75rem' }}>3</td>
-                                <td style={{ padding: '1rem 0.75rem' }}><span style={{ background: '#F3F4F6', color: '#6B7280', padding: '0.25rem 0.5rem', borderRadius: '99px', fontSize: '0.75rem', fontWeight: '600' }}>inactive</span></td>
-                            </tr>
-                            <tr style={{ borderBottom: '1px solid #F3F4F6' }}>
-                                <td style={{ padding: '1rem 0.75rem', fontWeight: '500' }}>Eva Martinez</td>
-                                <td style={{ padding: '1rem 0.75rem' }}>35%</td>
-                                <td style={{ padding: '1rem 0.75rem' }}>68%</td>
-                                <td style={{ padding: '1rem 0.75rem', color: '#10B981', fontWeight: '600' }}>+33%</td>
-                                <td style={{ padding: '1rem 0.75rem' }}>8</td>
-                                <td style={{ padding: '1rem 0.75rem' }}><span style={{ background: '#EEF2FF', color: '#4F46E5', padding: '0.25rem 0.5rem', borderRadius: '99px', fontSize: '0.75rem', fontWeight: '600' }}>active</span></td>
-                            </tr>
+                            {learnerData.map((learner) => (
+                                <tr key={learner.id} style={{ borderBottom: '1px solid #F3F4F6' }}>
+                                    <td style={{ padding: '1rem 0.75rem', fontWeight: '500' }}>{learner.name}</td>
+                                    <td style={{ padding: '1rem 0.75rem' }}>{learner.preTestAvg}</td>
+                                    <td style={{ padding: '1rem 0.75rem' }}>{learner.postTestAvg}</td>
+                                    <td style={{ padding: '1rem 0.75rem', color: learner.improvement.includes('+') ? '#10B981' : '#6B7280', fontWeight: '600' }}>
+                                        {learner.improvement}
+                                    </td>
+                                    <td style={{ padding: '1rem 0.75rem' }}>{learner.tests}</td>
+                                    <td style={{ padding: '1rem 0.75rem' }}>
+                                        <span style={{
+                                            background: learner.status === 'active' ? '#EEF2FF' : '#F3F4F6',
+                                            color: learner.status === 'active' ? '#4F46E5' : '#6B7280',
+                                            padding: '0.25rem 0.5rem',
+                                            borderRadius: '99px',
+                                            fontSize: '0.75rem',
+                                            fontWeight: '600'
+                                        }}>
+                                            {learner.status}
+                                        </span>
+                                    </td>
+                                </tr>
+                            ))}
+                            {learnerData.length === 0 && (
+                                <tr>
+                                    <td colSpan="6" style={{ padding: '2rem', textAlign: 'center', color: '#6B7280' }}>No learner data available.</td>
+                                </tr>
+                            )}
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
+
     );
 };
 

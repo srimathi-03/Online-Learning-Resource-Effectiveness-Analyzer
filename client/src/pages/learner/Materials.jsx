@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { PlayCircle, FileText, ExternalLink, Star, ChevronRight } from 'lucide-react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 
 const Materials = () => {
     const [materials, setMaterials] = useState([]);
-    const [course, setCourse] = useState(null);
     const [allowedLevel, setAllowedLevel] = useState('basic');
     const [loading, setLoading] = useState(true);
     const [user] = useState(JSON.parse(localStorage.getItem('user')) || {});
@@ -25,10 +24,6 @@ const Materials = () => {
                 const data = await api.getMaterialsByLevel(courseId, user.id);
                 setMaterials(data.materials || []);
                 setAllowedLevel(data.allowedLevel || 'basic');
-
-                // Also fetch course details for display
-                const courseData = await api.getCourseDetail(courseId);
-                setCourse(courseData);
             } catch (err) {
                 console.error('Failed to fetch materials', err);
             } finally {
@@ -77,7 +72,7 @@ const Materials = () => {
                     <p>Explore these high-quality resources to master the course topics.</p>
                     <div style={{ marginTop: '0.5rem' }}>
                         <span className={`level-badge ${allowedLevel}`}>
-                            {allowedLevel === 'advanced' ? '🚀 Advanced Content' : '📚 Basic Content'}
+                            {allowedLevel === 'advanced' ? '🚀 Advanced Content' : (allowedLevel === 'intermediate' ? '⚡ Intermediate Content' : '📚 Basic Content')}
                         </span>
                     </div>
                 </div>
