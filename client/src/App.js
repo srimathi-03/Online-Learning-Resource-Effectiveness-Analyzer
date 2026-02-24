@@ -1,10 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import HowItWorks from './components/HowItWorks';
-import FAQ from './components/FAQ';
-import Footer from './components/Footer';
+import WelcomePage from './pages/WelcomePage';
 import DashboardLayout from './components/DashboardLayout';
 import Dashboard from './pages/learner/Dashboard';
 import Courses from './pages/learner/Courses';
@@ -25,21 +21,13 @@ import AdminCreateCourse from './pages/admin/AdminCreateCourse';
 import PostTestResults from './pages/learner/PostTestResults';
 import RequireAdmin from './components/RequireAdmin';
 
-const Home = () => (
-  <>
-    <Navbar />
-    <Hero />
-    <HowItWorks />
-    <FAQ />
-    <Footer />
-  </>
-);
+
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<WelcomePage />} />
         <Route path="/auth" element={<Auth />} />
 
         {/* Dashboard Routes with Sidebar */}
