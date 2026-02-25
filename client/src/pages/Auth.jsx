@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { Mail, Lock, ArrowRight, UserPlus } from 'lucide-react';
 import api from '../services/api';
 
@@ -95,7 +95,12 @@ const Auth = () => {
                     </div>
 
                     <div className="input-group">
-                        <label>Password</label>
+                        <div className="input-label-row">
+                            <label>Password</label>
+                            {isLogin && (
+                                <Link to="/forgot-password" className="fp-link">Forgot Password?</Link>
+                            )}
+                        </div>
                         <div className="input-wrapper">
                             <Lock className="input-icon" size={18} />
                             <input

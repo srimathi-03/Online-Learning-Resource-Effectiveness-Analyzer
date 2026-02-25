@@ -19,6 +19,7 @@ import AdminCreateAssessment from './pages/admin/AdminCreateAssessment';
 import AdminAddMaterial from './pages/admin/AdminAddMaterial';
 import AdminCreateCourse from './pages/admin/AdminCreateCourse';
 import PostTestResults from './pages/learner/PostTestResults';
+import ForgotPassword from './pages/ForgotPassword';
 import RequireAdmin from './components/RequireAdmin';
 
 
@@ -29,6 +30,7 @@ function App() {
       <Routes>
         <Route path="/" element={<WelcomePage />} />
         <Route path="/auth" element={<Auth />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
 
         {/* Dashboard Routes with Sidebar */}
         <Route element={<DashboardLayout />}>

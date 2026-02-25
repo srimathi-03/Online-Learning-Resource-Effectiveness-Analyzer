@@ -18,6 +18,30 @@ const api = {
         });
         return res.json();
     },
+    forgotPassword: async (email) => {
+        const res = await fetch(`${API_BASE_URL}/auth/forgot-password`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+        });
+        return res.json();
+    },
+    verifyOtp: async (email, otp) => {
+        const res = await fetch(`${API_BASE_URL}/auth/verify-otp`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, otp })
+        });
+        return res.json();
+    },
+    resetPassword: async (email, resetToken, newPassword) => {
+        const res = await fetch(`${API_BASE_URL}/auth/reset-password`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, resetToken, newPassword })
+        });
+        return res.json();
+    },
 
     // Courses
     getCourses: async () => {

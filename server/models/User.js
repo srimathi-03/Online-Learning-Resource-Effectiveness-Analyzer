@@ -17,7 +17,10 @@ const userSchema = new mongoose.Schema({
         topicScores: { type: Map, of: Object }, // Structure: { "JavaScript": { pre: 20, post: 80 }, ... }
         lastAccessed: { type: Date, default: Date.now }
     }],
-    createdAt: { type: Date, default: Date.now }
+    createdAt: { type: Date, default: Date.now },
+    resetOtp: { type: String },
+    resetOtpExpiry: { type: Date },
+    resetToken: { type: String }
 });
 
 module.exports = mongoose.model('User', userSchema);
