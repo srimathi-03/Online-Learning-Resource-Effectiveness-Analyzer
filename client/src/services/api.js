@@ -1,7 +1,15 @@
 const API_BASE_URL = 'http://localhost:5001/api';
 
+// Helper: get Authorization header with stored JWT token
+const getAuthHeaders = () => {
+    const token = localStorage.getItem('token');
+    return token
+        ? { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
+        : { 'Content-Type': 'application/json' };
+};
+
 const api = {
-    // Auth
+    // Auth (no token needed)
     login: async (email, password) => {
         const res = await fetch(`${API_BASE_URL}/auth/login`, {
             method: 'POST',
@@ -43,7 +51,7 @@ const api = {
         return res.json();
     },
 
-    // Courses
+    // Courses — public reads, protected writes
     getCourses: async () => {
         const res = await fetch(`${API_BASE_URL}/courses`);
         return res.json();
@@ -59,59 +67,68 @@ const api = {
     createCourse: async (data) => {
         const res = await fetch(`${API_BASE_URL}/courses`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: getAuthHeaders(),
             body: JSON.stringify(data)
         });
         return res.json();
     },
     deleteCourse: async (id) => {
         const res = await fetch(`${API_BASE_URL}/courses/${id}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: getAuthHeaders()
         });
         return res.json();
     },
 
-    // Knowledge Level System
+    // Knowledge Level System — protected
     selectKnowledgeLevel: async (courseId, userId, knowledgeLevel) => {
         const res = await fetch(`${API_BASE_URL}/courses/${courseId}/select-level`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: getAuthHeaders(),
             body: JSON.stringify({ userId, knowledgeLevel })
         });
         return res.json();
     },
     getMaterialsByLevel: async (courseId, userId) => {
-        const res = await fetch(`${API_BASE_URL}/courses/${courseId}/materials-by-level?userId=${userId}`);
+        const token = localStorage.getItem('token');
+        const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+        const res = await fetch(`${API_BASE_URL}/courses/${courseId}/materials-by-level?userId=${userId}`, { headers });
         return res.json();
     },
 
-    // Results & Progress
+    // Results & Progress — all protected
     updateProgress: async (data) => {
         const res = await fetch(`${API_BASE_URL}/results/update`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: getAuthHeaders(),
             body: JSON.stringify(data)
         });
         return res.json();
     },
     getUserProgress: async (userId) => {
-        const res = await fetch(`${API_BASE_URL}/results/${userId}`);
+        const res = await fetch(`${API_BASE_URL}/results/${userId}`, {
+            headers: getAuthHeaders()
+        });
         return res.json();
     },
     getAllProgress: async () => {
-        const res = await fetch(`${API_BASE_URL}/results/all/progress`);
+        const res = await fetch(`${API_BASE_URL}/results/all/progress`, {
+            headers: getAuthHeaders()
+        });
         return res.json();
     },
     getSystemAnalytics: async () => {
-        const res = await fetch(`${API_BASE_URL}/results/analytics`);
+        const res = await fetch(`${API_BASE_URL}/results/analytics`, {
+            headers: getAuthHeaders()
+        });
         return res.json();
     },
 
-    // Admin Content Management
+    // Admin Content Management — protected
     addMaterial: async (courseId, data) => {
         const res = await fetch(`${API_BASE_URL}/courses/${courseId}/materials`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: getAuthHeaders(),
             body: JSON.stringify(data)
         });
         return res.json();
@@ -119,7 +136,7 @@ const api = {
     addQuestion: async (courseId, data) => {
         const res = await fetch(`${API_BASE_URL}/courses/${courseId}/questions`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: getAuthHeaders(),
             body: JSON.stringify(data)
         });
         return res.json();

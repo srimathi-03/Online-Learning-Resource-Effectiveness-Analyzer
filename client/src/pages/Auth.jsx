@@ -37,6 +37,9 @@ const Auth = () => {
 
             if (data.user) {
                 localStorage.setItem('user', JSON.stringify(data.user));
+                if (data.token) {
+                    localStorage.setItem('token', data.token);
+                }
                 if (data.user.role === 'admin') {
                     navigate('/admin');
                 } else {

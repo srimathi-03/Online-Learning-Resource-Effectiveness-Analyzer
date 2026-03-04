@@ -191,7 +191,7 @@ const seed = async () => {
         await Course.deleteMany({});
         await User.deleteMany({});
 
-        // Seed default users
+        // Seed default users — use save() so the bcrypt pre-save hook hashes passwords
         const defaultUsers = [
             {
                 fullName: 'Admin User',
@@ -208,7 +208,10 @@ const seed = async () => {
                 isNewUser: false
             }
         ];
-        await User.insertMany(defaultUsers);
+        for (const userData of defaultUsers) {
+            const user = new User(userData);
+            await user.save(); // triggers bcrypt pre-save hook to hash the password
+        }
 
         const courses = templates.map(tpl => ({
             title: tpl.title,

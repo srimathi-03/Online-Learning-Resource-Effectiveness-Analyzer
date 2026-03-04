@@ -1,34 +1,67 @@
 const User = require('../models/User');
+const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
+const { body, validationResult } = require('express-validator');
 
 // ------ helpers ------
 const generateOtp = () => Math.floor(100000 + Math.random() * 900000).toString();
 
-// Brevo (Sendinblue) SMTP — no Gmail 2FA needed, free 300 emails/day
+const signToken = (user) => {
+    return jwt.sign(
+        { id: user._id, role: user.role },
+        process.env.JWT_SECRET,
+        { expiresIn: '7d' }
+    );
+};
+
+// Brevo (Sendinblue) SMTP transporter
 const createBrevoTransporter = () => {
     return nodemailer.createTransport({
         host: 'smtp-relay.brevo.com',
         port: 587,
         secure: false,
         auth: {
-            user: process.env.BREVO_USER,   // your Brevo account email
-            pass: process.env.BREVO_SMTP_KEY, // SMTP key from Brevo dashboard
+            user: process.env.BREVO_USER,
+            pass: process.env.BREVO_SMTP_KEY,
         },
     });
 };
 
+// ------ signup validation rules ------
+exports.signupValidation = [
+    body('fullName').trim().notEmpty().withMessage('Full name is required'),
+    body('email').isEmail().withMessage('Valid email is required').normalizeEmail(),
+    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
+];
+
+// ------ login validation rules ------
+exports.loginValidation = [
+    body('email').isEmail().withMessage('Valid email is required').normalizeEmail(),
+    body('password').notEmpty().withMessage('Password is required'),
+];
+
 // ------ signup ------
 exports.signup = async (req, res) => {
+    // Check validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ message: errors.array()[0].msg });
+    }
+
     try {
         const { fullName, email, password } = req.body;
         let user = await User.findOne({ email });
         if (user) return res.status(400).json({ message: 'User already exists' });
 
         user = new User({ fullName, email, password });
-        await user.save();
+        await user.save(); // bcrypt hook hashes password here
+
+        const token = signToken(user);
+
         res.status(201).json({
             message: 'User created successfully',
+            token,
             user: { id: user._id, fullName, email, role: user.role, isNewUser: user.isNewUser },
         });
     } catch (err) {
@@ -38,14 +71,30 @@ exports.signup = async (req, res) => {
 
 // ------ login ------
 exports.login = async (req, res) => {
+    // Check validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ message: errors.array()[0].msg });
+    }
+
     try {
         const { email, password } = req.body;
         const user = await User.findOne({ email });
-        if (!user || user.password !== password) {
+
+        if (!user) {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
+
+        const isMatch = await user.matchPassword(password);
+        if (!isMatch) {
+            return res.status(400).json({ message: 'Invalid credentials' });
+        }
+
+        const token = signToken(user);
+
         res.json({
             message: 'Login successful',
+            token,
             user: {
                 id: user._id,
                 fullName: user.fullName,
@@ -66,25 +115,23 @@ exports.forgotPassword = async (req, res) => {
         const user = await User.findOne({ email });
 
         if (!user) {
-            // Still return fake success (security: don't reveal if email exists)
             return res.json({
                 message: 'OTP sent.',
-                devOtp: null  // null means email not found
+                devOtp: null
             });
         }
 
         const otp = generateOtp();
         user.resetOtp = otp;
-        user.resetOtpExpiry = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes
+        user.resetOtpExpiry = new Date(Date.now() + 5 * 60 * 1000);
         user.resetToken = null;
         await user.save();
 
         console.log(`\n🔑 OTP for ${email}: ${otp}\n`);
 
-        // Return OTP directly in response so frontend can show it on-screen
         res.json({
             message: 'OTP generated successfully.',
-            otp: otp   // Frontend displays this to the user
+            otp: otp
         });
     } catch (err) {
         console.error('forgotPassword error:', err.message);
@@ -108,7 +155,6 @@ exports.verifyOtp = async (req, res) => {
             return res.status(400).json({ message: 'OTP has expired. Please request a new one.' });
         }
 
-        // Generate a short-lived reset token
         const resetToken = crypto.randomBytes(32).toString('hex');
         user.resetToken = resetToken;
         user.resetOtp = null;
@@ -134,7 +180,7 @@ exports.resetPassword = async (req, res) => {
             return res.status(400).json({ message: 'Password must be at least 6 characters.' });
         }
 
-        user.password = newPassword;
+        user.password = newPassword; // bcrypt hook hashes it on save
         user.resetToken = null;
         await user.save();
 

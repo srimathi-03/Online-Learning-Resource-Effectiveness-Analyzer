@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const helmet = require('helmet');
 require('dotenv').config();
 
 const connectDB = require('./config/db');
@@ -12,6 +13,7 @@ const PORT = process.env.PORT || 5000;
 connectDB();
 
 // Middleware
+app.use(helmet()); // Secure HTTP headers
 app.use(cors());
 app.use(express.json());
 
