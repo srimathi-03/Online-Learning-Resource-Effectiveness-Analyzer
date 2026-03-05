@@ -43,9 +43,11 @@ const Assessment = () => {
                     }
                 }
 
-                // Randomly select 10 questions (or fewer if not enough available)
+                // Use all filtered questions — count matches PreTest preview
+                // All Levels: 12 (sliced) | Easy: 7 | Medium: 7 | Hard: 6
                 const shuffled = [...allQuestions].sort(() => Math.random() - 0.5);
-                const selectedQuestions = shuffled.slice(0, 10);
+                const isAllLevels = !difficultyKey || difficultyKey.toLowerCase() === 'all levels';
+                const selectedQuestions = isAllLevels ? shuffled.slice(0, 12) : shuffled;
 
                 setQuestions(selectedQuestions);
             } catch (err) {

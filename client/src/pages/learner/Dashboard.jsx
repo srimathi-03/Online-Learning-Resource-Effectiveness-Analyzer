@@ -25,14 +25,11 @@ const Dashboard = () => {
                 });
 
                 const formattedProgress = progressData
-                    .filter(p => p.courseId && courseMap[p.courseId.toString()]) // Filter out deleted courses
-                    .map(p => {
-                        const sid = p.courseId.toString();
-                        return {
-                            ...p,
-                            courseTitle: courseMap[sid]
-                        };
-                    });
+                    .filter(p => p.courseId && courseMap[p.courseId.toString()])
+                    .map(p => ({
+                        ...p,
+                        courseTitle: courseMap[p.courseId.toString()]
+                    }));
 
                 setProgress(formattedProgress);
             } catch (err) {
@@ -117,6 +114,7 @@ const Dashboard = () => {
                             )
                         ))}
                     </div>
+
 
                     {/* Active Courses Section */}
                     <div className="dashboard-section" style={{ marginTop: '2rem', marginBottom: '2rem' }}>

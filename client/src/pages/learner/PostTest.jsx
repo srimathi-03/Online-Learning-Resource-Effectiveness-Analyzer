@@ -3,6 +3,14 @@ import { ChevronRight, Target, Award, PlayCircle } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 
+// Matches seeder's generateQuestionsSet output (7E + 7M + 6H = 20, All Levels capped at 12)
+const DIFFICULTY_COUNTS = {
+    'All Levels': 12,
+    'Easy': 7,
+    'Medium': 7,
+    'Hard': 6
+};
+
 const PostTest = () => {
     const [difficulty, setDifficulty] = useState('All Levels');
     const [course, setCourse] = useState(null);
@@ -77,7 +85,22 @@ const PostTest = () => {
 
                     <div className="start-test-box">
                         <div className="test-meta">
-                            <span className="q-count">{course.totalQuestions} Questions</span>
+                            <span className="q-count">
+                                {DIFFICULTY_COUNTS[difficulty]} Questions
+                                {difficulty !== 'All Levels' && (
+                                    <span style={{
+                                        marginLeft: '0.5rem',
+                                        fontSize: '0.7rem',
+                                        fontWeight: 600,
+                                        padding: '2px 7px',
+                                        borderRadius: '99px',
+                                        background: difficulty === 'Easy' ? '#D1FAE5' : difficulty === 'Medium' ? '#FEF3C7' : '#FEE2E2',
+                                        color: difficulty === 'Easy' ? '#065F46' : difficulty === 'Medium' ? '#92400E' : '#991B1B'
+                                    }}>
+                                        {difficulty} only
+                                    </span>
+                                )}
+                            </span>
                             <span className="dot">•</span>
                             <span className="t-est">~15 mins</span>
                         </div>

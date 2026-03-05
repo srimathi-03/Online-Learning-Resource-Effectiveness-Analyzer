@@ -157,6 +157,7 @@ const AllRecommendations = () => {
                                     <span className="score-badge">Final Score: {item.progress.postTestScore}%</span>
                                 </div>
 
+                                {/* Materials studied */}
                                 <p style={{ marginBottom: '0.5rem', fontSize: '0.9rem', color: '#6B7280' }}>You mastered:</p>
                                 <div className="materials-grid-compact">
                                     {item.recommendedMaterials.slice(0, 3).map((mat, mIdx) => (
@@ -169,6 +170,45 @@ const AllRecommendations = () => {
                                         </div>
                                     ))}
                                 </div>
+
+                                {/* Recommended next resources */}
+                                {item.course.recommendations && item.course.recommendations.length > 0 && (
+                                    <div style={{ marginTop: '1.25rem' }}>
+                                        <p style={{ fontSize: '0.88rem', fontWeight: 600, color: '#111827', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                                            ✨ Next Steps — Recommended Resources
+                                        </p>
+                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '0.75rem' }}>
+                                            {item.course.recommendations.map((rec, rIdx) => (
+                                                <a
+                                                    key={rIdx}
+                                                    href={rec.url || '#'}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    style={{
+                                                        display: 'flex', flexDirection: 'column', gap: '0.3rem',
+                                                        background: 'white', borderRadius: '10px', padding: '0.9rem',
+                                                        border: '1px solid #E5E7EB', textDecoration: 'none',
+                                                        boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+                                                        transition: 'box-shadow 0.2s, transform 0.15s'
+                                                    }}
+                                                    onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 4px 12px rgba(79,70,229,0.12)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+                                                    onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.05)'; e.currentTarget.style.transform = 'none'; }}
+                                                >
+                                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                        <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#4F46E5' }}>{rec.provider}</span>
+                                                        <span style={{ fontSize: '0.68rem', fontWeight: 600, color: '#059669', background: '#ECFDF5', padding: '2px 6px', borderRadius: '99px' }}>{rec.efficiency}</span>
+                                                    </div>
+                                                    <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#111827', lineHeight: 1.3 }}>{rec.title}</span>
+                                                    <span style={{ fontSize: '0.75rem', color: '#6B7280', lineHeight: 1.4 }}>{rec.description}</span>
+                                                    <span style={{ marginTop: '0.2rem', fontSize: '0.75rem', color: '#4F46E5', fontWeight: 500, display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                                                        <ArrowRight size={12} /> Open resource
+                                                    </span>
+                                                </a>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+
                                 <div style={{ marginTop: '1rem', textAlign: 'right' }}>
                                     <button onClick={() => navigate(`/results?courseId=${item.course._id}`)} className="btn-text">
                                         View Certificate

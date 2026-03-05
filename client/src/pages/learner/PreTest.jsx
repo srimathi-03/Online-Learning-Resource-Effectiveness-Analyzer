@@ -3,6 +3,14 @@ import { FileCheck, Globe, ChevronRight } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import api from '../../services/api';
 
+// Per-difficulty question counts (must match seeder's generateQuestionsSet output)
+const DIFFICULTY_COUNTS = {
+    'All Levels': 12,
+    'Easy': 7,
+    'Medium': 7,
+    'Hard': 6
+};
+
 const PreTest = () => {
     const [difficulty, setDifficulty] = useState('All Levels');
     const [course, setCourse] = useState(null);
@@ -76,8 +84,23 @@ const PreTest = () => {
                 {/* Start Card */}
                 <div className="refined-card-action">
                     <div className="questions-stat">
-                        <span className="stat-label">Questions available</span>
-                        <span className="stat-number">{course.totalQuestions}</span>
+                        <span className="stat-label">
+                            Questions available
+                            {difficulty !== 'All Levels' && (
+                                <span className="difficulty-badge" style={{
+                                    marginLeft: '0.5rem',
+                                    fontSize: '0.72rem',
+                                    fontWeight: 600,
+                                    padding: '2px 8px',
+                                    borderRadius: '99px',
+                                    background: difficulty === 'Easy' ? '#D1FAE5' : difficulty === 'Medium' ? '#FEF3C7' : '#FEE2E2',
+                                    color: difficulty === 'Easy' ? '#065F46' : difficulty === 'Medium' ? '#92400E' : '#991B1B'
+                                }}>
+                                    {difficulty} only
+                                </span>
+                            )}
+                        </span>
+                        <span className="stat-number">{DIFFICULTY_COUNTS[difficulty]}</span>
                     </div>
                     <Link to={`/assessment?courseId=${course._id}&type=pre&difficulty=${difficulty.toLowerCase()}`} className="btn-primary-start-test">
                         Start Test <ChevronRight size={18} />
