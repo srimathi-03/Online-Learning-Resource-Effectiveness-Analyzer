@@ -846,3 +846,109 @@
         display: none;
     }
 }
+
+/* ══════════════════════════════════
+   ROLE-SELECTION CARDS (Hero)
+══════════════════════════════════ */
+.wp-role-cards {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 56px;
+    animation: hero-title-in 0.7s ease 0.3s both;
+}
+
+.wp-role-card {
+    border-radius: 20px;
+    padding: 32px 28px;
+    width: 260px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    outline: none;
+}
+
+.wp-role-card:hover,
+.wp-role-card:focus {
+    transform: translateY(-8px);
+}
+
+/* Admin — amber glow */
+.wp-role-card--admin:hover,
+.wp-role-card--admin:focus {
+    box-shadow: 0 0 32px rgba(245, 158, 11, 0.3), var(--shadow-card);
+    border-color: rgba(245, 158, 11, 0.4);
+}
+
+/* Learner — indigo glow */
+.wp-role-card--learner:hover,
+.wp-role-card--learner:focus {
+    box-shadow: 0 0 32px rgba(79, 70, 229, 0.35), var(--shadow-card);
+    border-color: rgba(79, 70, 229, 0.4);
+}
+
+.wp-role-icon {
+    font-size: 2.8rem;
+    line-height: 1;
+    margin-bottom: 4px;
+}
+
+.wp-role-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.wp-role-desc {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    margin: 0;
+}
+
+.wp-role-btn {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 99px;
+    letter-spacing: 0.01em;
+}
+
+.wp-role-btn--admin {
+    background: rgba(245, 158, 11, 0.12);
+    color: #f59e0b;
+    border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+.wp-role-btn--learner {
+    background: rgba(79, 70, 229, 0.12);
+    color: #818cf8;
+    border: 1px solid rgba(79, 70, 229, 0.25);
+}
+
+/* Auth page role badge */
+.auth-role-badge {
+    border-radius: 12px 12px 0 0;
+    padding: 1.1rem 1.75rem;
+    margin: -2rem -2rem 0;
+}
+
+@media (max-width: 600px) {
+    .wp-role-cards {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .wp-role-card {
+        width: 100%;
+        max-width: 320px;
+    }
+}

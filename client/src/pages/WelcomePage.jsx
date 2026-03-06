@@ -116,8 +116,8 @@ const WelcomePage = () => {
                         <a href="#how" className="wp-nav-link">How it Works</a>
                     </div>
                     <div className="wp-nav-actions">
-                        <button className="wp-btn wp-btn-ghost" onClick={() => navigate('/auth?mode=login')}>Sign In</button>
-                        <button className="wp-btn wp-btn-primary" onClick={() => navigate('/auth?mode=signup')}>Get Started</button>
+                        <button className="wp-btn wp-btn-ghost" onClick={() => navigate('/auth?role=admin')}>Admin Sign-In</button>
+                        <button className="wp-btn wp-btn-primary" onClick={() => navigate('/auth?role=learner')}>Learner Sign-In</button>
                     </div>
                 </div>
             </nav>
@@ -139,14 +139,35 @@ const WelcomePage = () => {
                     all in one adaptive learning platform built for serious learners.
                 </p>
 
-                <div className="wp-hero-cta">
-                    <button className="wp-btn wp-btn-primary wp-btn-lg" onClick={() => navigate('/auth?mode=signup')}>
-                        Start Learning Free
-                        <span className="wp-btn-arrow">→</span>
-                    </button>
-                    <button className="wp-btn wp-btn-outline wp-btn-lg" onClick={() => navigate('/auth?mode=login')}>
-                        Sign In
-                    </button>
+                {/* Role Selection Cards */}
+                <div className="wp-role-cards">
+                    {/* Admin card */}
+                    <div
+                        className="wp-role-card wp-role-card--admin glass"
+                        onClick={() => navigate('/auth?role=admin')}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={e => e.key === 'Enter' && navigate('/auth?role=admin')}
+                    >
+                        <div className="wp-role-icon">🛡️</div>
+                        <h3 className="wp-role-title">Admin Sign-In</h3>
+                        <p className="wp-role-desc">Manage courses, users &amp; assessments from your control centre.</p>
+                        <span className="wp-role-btn wp-role-btn--admin">Enter Admin Portal →</span>
+                    </div>
+
+                    {/* Learner card */}
+                    <div
+                        className="wp-role-card wp-role-card--learner glass"
+                        onClick={() => navigate('/auth?role=learner')}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={e => e.key === 'Enter' && navigate('/auth?role=learner')}
+                    >
+                        <div className="wp-role-icon">🎓</div>
+                        <h3 className="wp-role-title">Learner Sign-In</h3>
+                        <p className="wp-role-desc">Access courses, take assessments and track your learning growth.</p>
+                        <span className="wp-role-btn wp-role-btn--learner">Start Learning →</span>
+                    </div>
                 </div>
 
                 {/* Floating hero card */}
@@ -249,8 +270,8 @@ const WelcomePage = () => {
                     <p className="wp-cta-desc">
                         Join thousands of learners already using OREA to accelerate their growth.
                     </p>
-                    <button className="wp-btn wp-btn-primary wp-btn-lg" onClick={() => navigate('/auth?mode=signup')}>
-                        Create Free Account
+                    <button className="wp-btn wp-btn-primary wp-btn-lg" onClick={() => navigate('/auth?role=learner')}>
+                        Start as Learner
                         <span className="wp-btn-arrow">→</span>
                     </button>
                 </div>
