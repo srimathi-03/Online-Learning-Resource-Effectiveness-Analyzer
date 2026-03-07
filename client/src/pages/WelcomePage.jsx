@@ -116,8 +116,8 @@ const WelcomePage = () => {
                         <a href="#how" className="wp-nav-link">How it Works</a>
                     </div>
                     <div className="wp-nav-actions">
-                        <button className="wp-btn wp-btn-ghost" onClick={() => navigate('/auth?role=admin')}>Admin Sign-In</button>
-                        <button className="wp-btn wp-btn-primary" onClick={() => navigate('/auth?role=learner')}>Learner Sign-In</button>
+                        <button className="wp-btn wp-btn-ghost" onClick={() => navigate('/auth?role=admin')}>Admin </button>
+                        <button className="wp-btn wp-btn-primary" onClick={() => navigate('/auth?role=learner')}>Learner </button>
                     </div>
                 </div>
             </nav>
@@ -150,7 +150,7 @@ const WelcomePage = () => {
                         onKeyDown={e => e.key === 'Enter' && navigate('/auth?role=admin')}
                     >
                         <div className="wp-role-icon">🛡️</div>
-                        <h3 className="wp-role-title">Admin Sign-In</h3>
+                        <h3 className="wp-role-title">Admin</h3>
                         <p className="wp-role-desc">Manage courses, users &amp; assessments from your control centre.</p>
                         <span className="wp-role-btn wp-role-btn--admin">Enter Admin Portal →</span>
                     </div>
@@ -164,7 +164,7 @@ const WelcomePage = () => {
                         onKeyDown={e => e.key === 'Enter' && navigate('/auth?role=learner')}
                     >
                         <div className="wp-role-icon">🎓</div>
-                        <h3 className="wp-role-title">Learner Sign-In</h3>
+                        <h3 className="wp-role-title">Learner</h3>
                         <p className="wp-role-desc">Access courses, take assessments and track your learning growth.</p>
                         <span className="wp-role-btn wp-role-btn--learner">Start Learning →</span>
                     </div>
