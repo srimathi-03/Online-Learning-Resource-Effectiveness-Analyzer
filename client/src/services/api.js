@@ -140,6 +140,12 @@ const api = {
             body: JSON.stringify(data)
         });
         return res.json();
+    },
+    getPreTestRecommendations: async (userId, courseId) => {
+        const res = await fetch(`${API_BASE_URL}/results/recommendations/${userId}/${courseId}`, {
+            headers: getAuthHeaders()
+        });
+        return res.json();
     }
 };
 

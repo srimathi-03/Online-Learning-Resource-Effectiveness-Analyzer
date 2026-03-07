@@ -7,6 +7,7 @@ const { protect } = require('../middleware/authMiddleware');
 router.post('/update', protect, resultController.updateProgress);
 router.get('/all/progress', protect, resultController.getAllUsersProgress);
 router.get('/analytics', protect, resultController.getSystemAnalytics);
+router.get('/recommendations/:userId/:courseId', protect, resultController.getPreTestRecommendations);
 router.get('/:userId', protect, resultController.getUserProgress);
 
 module.exports = router;

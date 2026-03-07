@@ -7,6 +7,7 @@ import Courses from './pages/learner/Courses';
 import KnowledgeLevelSelection from './pages/learner/KnowledgeLevelSelection';
 import PreTest from './pages/learner/PreTest';
 import PreTestResults from './pages/learner/PreTestResults';
+import PreTestRecommendations from './pages/learner/PreTestRecommendations';
 import Materials from './pages/learner/Materials';
 import PostTest from './pages/learner/PostTest';
 import Results from './pages/learner/Results';
@@ -40,6 +41,7 @@ function App() {
           <Route path="/recommendations" element={<AllRecommendations />} />
           <Route path="/pre-test" element={<PreTest />} />
           <Route path="/pre-test-results" element={<PreTestResults />} />
+          <Route path="/pre-test-recommendations" element={<PreTestRecommendations />} />
           <Route path="/assessment" element={<Assessment />} />
           <Route path="/materials" element={<Materials />} />
           <Route path="/post-test" element={<PostTest />} />

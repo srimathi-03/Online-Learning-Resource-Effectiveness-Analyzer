@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
-import { CheckCircle, TrendingUp, ChevronRight } from 'lucide-react';
+import { CheckCircle, TrendingUp, ChevronRight, BookOpen, SkipForward } from 'lucide-react';
 import api from '../../services/api';
 
 const PreTestResults = () => {
@@ -12,12 +12,8 @@ const PreTestResults = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-
-
     // Rename destructured variables to avoid conflict with top-level state
-    const { questions: stateQuestions, userAnswers: stateUserAnswers, score: passedScore } = location.state || {};
-
-
+    const { questions: stateQuestions, userAnswers: stateUserAnswers, score: passedScore, topicScores: passedTopicScores } = location.state || {};
 
     useEffect(() => {
         const fetchProgress = async () => {
@@ -41,10 +37,14 @@ const PreTestResults = () => {
         navigate(`/materials?courseId=${courseId}`);
     };
 
+    const handleViewRecommendations = () => {
+        navigate(`/pre-test-recommendations?courseId=${courseId}`, {
+            state: { score, topicScores: passedTopicScores }
+        });
+    };
+
     if (loading) return <div className="loading-state">Loading your results...</div>;
     if (!progress && passedScore === undefined) return <div className="error-state">No test results found</div>;
-
-
 
     // Use passed score if available (immediate result), otherwise fetch from DB
     const score = passedScore !== undefined ? passedScore : (progress?.preTestScore || 0);
@@ -53,11 +53,14 @@ const PreTestResults = () => {
     if (score >= 80) assignedLevel = 'advanced';
     else if (score >= 50) assignedLevel = 'intermediate';
 
+    // Show recommendation CTA for learners below 80%
+    const showRecommendations = score < 80;
+
     return (
         <div className="pretest-results-container">
             <div className="results-card">
                 <div className={`results-icon ${score >= 50 ? 'success' : 'warning'}`}>
-                    {score >= 80 ? <CheckCircle size={64} /> : (score >= 50 ? <TrendingUp size={64} /> : <TrendingUp size={64} />)}
+                    {score >= 80 ? <CheckCircle size={64} /> : <TrendingUp size={64} />}
                 </div>
 
                 <h1 className="results-title">Pre-Test Complete!</h1>
@@ -106,6 +109,19 @@ const PreTestResults = () => {
                     )}
                 </div>
 
+                {/* Recommendation CTA banner for scores < 80% */}
+                {showRecommendations && (
+                    <div className="rec-cta-banner">
+                        <div className="rec-cta-banner-icon">
+                            <BookOpen size={28} />
+                        </div>
+                        <div className="rec-cta-banner-text">
+                            <h3>Want to strengthen your weak areas first?</h3>
+                            <p>We've curated the best free resources — YouTube tutorials, official docs &amp; top online courses — personalised to the topics where you need the most help.</p>
+                        </div>
+                    </div>
+                )}
+
                 {/* Answer Review Section */}
                 {stateQuestions && stateUserAnswers && (
                     <div className="answers-review-section" style={{ marginTop: '3rem', textAlign: 'left' }}>
@@ -143,9 +159,24 @@ const PreTestResults = () => {
                     </div>
                 )}
 
-                <button className="btn-primary continue-btn" onClick={handleContinue}>
-                    Continue to Materials <ChevronRight size={20} />
-                </button>
+                {/* Primary CTA — Recommendations for score < 80%, direct continue for ≥ 80% */}
+                {showRecommendations ? (
+                    <div className="pretest-results-actions">
+                        <button className="btn-primary continue-btn rec-primary-btn" onClick={handleViewRecommendations}>
+                            <BookOpen size={20} />
+                            View Personalised Recommendations
+                            <ChevronRight size={20} />
+                        </button>
+                        <button className="btn-skip-rec" onClick={handleContinue}>
+                            <SkipForward size={16} />
+                            Skip &amp; go directly to Materials
+                        </button>
+                    </div>
+                ) : (
+                    <button className="btn-primary continue-btn" onClick={handleContinue}>
+                        Continue to Materials <ChevronRight size={20} />
+                    </button>
+                )}
             </div>
         </div>
     );
