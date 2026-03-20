@@ -22,9 +22,6 @@ import AdminCreateCourse from './pages/admin/AdminCreateCourse';
 import PostTestResults from './pages/learner/PostTestResults';
 import ForgotPassword from './pages/ForgotPassword';
 import RequireAdmin from './components/RequireAdmin';
-import AdaptiveTestIntro from './pages/learner/AdaptiveTestIntro';
-import AdaptiveTest from './pages/learner/AdaptiveTest';
-import TopicDependencyMap from './pages/learner/TopicDependencyMap';
 
 
 
@@ -45,9 +42,6 @@ function App() {
           <Route path="/pre-test" element={<PreTest />} />
           <Route path="/pre-test-results" element={<PreTestResults />} />
           <Route path="/pre-test-recommendations" element={<PreTestRecommendations />} />
-          <Route path="/adaptive-test-intro" element={<AdaptiveTestIntro />} />
-          <Route path="/adaptive-test" element={<AdaptiveTest />} />
-          <Route path="/topic-map" element={<TopicDependencyMap />} />
           <Route path="/assessment" element={<Assessment />} />
           <Route path="/materials" element={<Materials />} />
           <Route path="/post-test" element={<PostTest />} />

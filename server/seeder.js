@@ -308,9 +308,9 @@ const generateQuestionsSet = (qKey, type) => {
 
     // Select balanced distribution
     const selected = [
-        ...easy.slice(0, 7),
-        ...medium.slice(0, 7),
-        ...hard.slice(0, 6)
+        ...easy.slice(0, 10),
+        ...medium.slice(0, 10),
+        ...hard.slice(0, 10)
     ];
 
     // Shuffle so questions are not grouped by difficulty
@@ -391,8 +391,8 @@ const seed = async () => {
 
         console.log('\n✅ Database Seeded Successfully!');
         console.log(`   📚 ${courses.length} courses created`);
-        console.log(`   ❓ Each course: 20 Pre-Test questions (7 Easy + 7 Medium + 6 Hard)`);
-        console.log(`   ❓             20 Post-Test questions (7 Easy + 7 Medium + 6 Hard)`);
+        console.log(`   ❓ Each course: 30 Pre-Test questions (10 Easy + 10 Medium + 10 Hard)`);
+        console.log(`   ❓             30 Post-Test questions (10 Easy + 10 Medium + 10 Hard)`);
         console.log(`   🔀 Pre-Test & Post-Test questions are completely different (no overlap)`);
         console.log(`   👤 2 default users created (admin@admin.com / learner@learner.com)\n`);
 

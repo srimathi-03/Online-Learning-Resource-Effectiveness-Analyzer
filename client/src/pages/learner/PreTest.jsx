@@ -3,8 +3,8 @@ import { FileCheck, Globe, ChevronRight } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import api from '../../services/api';
 
-// Per-difficulty question counts (must match seeder's generateQuestionsSet output)
-const DIFFICULTY_COUNTS = {
+// Fallback counts if course is not loaded
+const FALLBACK_COUNTS = {
     'All Levels': 12,
     'Easy': 7,
     'Medium': 7,
@@ -39,6 +39,14 @@ const PreTest = () => {
     if (loading) return <div className="loading-state">Loading assessment...</div>;
     if (!course) return <div className="error-state">Course not found.</div>;
 
+    const preQuestions = course.preTestQuestions || [];
+    const difficultyCounts = {
+        'All Levels': Math.min(30, preQuestions.length),
+        'Easy': preQuestions.filter(q => q.difficulty?.toLowerCase() === 'easy').length,
+        'Medium': preQuestions.filter(q => q.difficulty?.toLowerCase() === 'medium').length,
+        'Hard': preQuestions.filter(q => q.difficulty?.toLowerCase() === 'hard').length
+    };
+
     return (
         <div className="dashboard-container">
             <header className="page-header-refined">
@@ -51,17 +59,10 @@ const PreTest = () => {
                     <Globe size={18} className="course-icon" />
                     <span className="course-name">{course.title}</span>
                 </div>
-                <p className="page-subtitle">Choose your preferred test mode to begin your assessment.</p>
+                <p className="page-subtitle">Select difficulty level to begin your assessment.</p>
             </header>
 
             <div className="refined-assessment-flow">
-
-                {/* Classic Mode Label */}
-                <div className="pretest-mode-section-label">
-                    <span className="mode-label-chip mode-classic">📋 Classic Mode</span>
-                    <p className="mode-label-desc">Choose a difficulty and answer all questions in that tier.</p>
-                </div>
-
                 {/* Difficulty Card */}
                 <div className="refined-card">
                     <h3>Select Difficulty</h3>
@@ -88,7 +89,7 @@ const PreTest = () => {
                     </div>
                 </div>
 
-                {/* Start Classic */}
+                {/* Start Card */}
                 <div className="refined-card-action">
                     <div className="questions-stat">
                         <span className="stat-label">
@@ -107,43 +108,12 @@ const PreTest = () => {
                                 </span>
                             )}
                         </span>
-                        <span className="stat-number">{DIFFICULTY_COUNTS[difficulty]}</span>
+                        <span className="stat-number">{difficultyCounts[difficulty] || 0}</span>
                     </div>
                     <Link to={`/assessment?courseId=${course._id}&type=pre&difficulty=${difficulty.toLowerCase()}`} className="btn-primary-start-test">
-                        Start Classic Test <ChevronRight size={18} />
+                        Start Test <ChevronRight size={18} />
                     </Link>
                 </div>
-
-                {/* Adaptive Mode Label */}
-                <div className="pretest-mode-section-label" style={{ marginTop: '2.5rem' }}>
-                    <span className="mode-label-chip mode-adaptive">🎯 Smart Adaptive Mode</span>
-                    <p className="mode-label-desc">AI-powered test that adjusts difficulty in real-time — like GRE &amp; GMAT.</p>
-                </div>
-
-                {/* Adaptive Promo Card */}
-                <div className="adaptive-promo-card">
-                    <div className="adaptive-promo-left">
-                        <div className="adaptive-promo-icon-wrap">
-                            <span style={{ fontSize: '2rem' }}>🧠</span>
-                        </div>
-                        <div className="adaptive-promo-content">
-                            <h3 className="adaptive-promo-title">Smart Adaptive Test</h3>
-                            <p className="adaptive-promo-desc">
-                                The test adjusts <strong>harder or easier</strong> based on each answer you give.
-                                Only <strong>10 questions</strong> to accurately pinpoint your skill level.
-                            </p>
-                            <div className="adaptive-promo-tags">
-                                <span className="promo-tag">✓ GRE/GMAT-style IRT</span>
-                                <span className="promo-tag">✓ 10 questions only</span>
-                                <span className="promo-tag">✓ Live difficulty indicator</span>
-                            </div>
-                        </div>
-                    </div>
-                    <Link to={`/adaptive-test-intro?courseId=${course._id}`} className="btn-adaptive-promo">
-                        Learn More &amp; Start <ChevronRight size={18} />
-                    </Link>
-                </div>
-
             </div>
         </div>
     );

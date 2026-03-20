@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
-import { LayoutDashboard, BookOpen, Book, FileText, LogOut, FileCheck, BarChart2, Map } from 'lucide-react';
+import { LayoutDashboard, BookOpen, Book, FileText, LogOut, FileCheck, BarChart2 } from 'lucide-react';
 
 const Sidebar = () => {
     const userStr = localStorage.getItem('user');
@@ -27,7 +27,6 @@ const Sidebar = () => {
     const learnerItems = [
         { icon: <LayoutDashboard size={20} />, label: 'Dashboard', path: '/dashboard' },
         { icon: <BookOpen size={20} />, label: 'Courses', path: '/courses' },
-        { icon: <Map size={20} />, label: 'Topic Map', path: '/topic-map' },
     ];
 
     const navItems = isAdmin ? adminItems : learnerItems;

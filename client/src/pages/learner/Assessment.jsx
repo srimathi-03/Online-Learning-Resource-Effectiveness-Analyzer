@@ -47,7 +47,7 @@ const Assessment = () => {
                 // All Levels: 12 (sliced) | Easy: 7 | Medium: 7 | Hard: 6
                 const shuffled = [...allQuestions].sort(() => Math.random() - 0.5);
                 const isAllLevels = !difficultyKey || difficultyKey.toLowerCase() === 'all levels';
-                const selectedQuestions = isAllLevels ? shuffled.slice(0, 12) : shuffled;
+                const selectedQuestions = isAllLevels ? shuffled.slice(0, 30) : shuffled;
 
                 setQuestions(selectedQuestions);
             } catch (err) {

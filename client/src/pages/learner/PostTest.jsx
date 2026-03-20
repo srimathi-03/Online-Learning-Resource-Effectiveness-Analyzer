@@ -3,8 +3,8 @@ import { ChevronRight, Target, Award, PlayCircle } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 
-// Matches seeder's generateQuestionsSet output (7E + 7M + 6H = 20, All Levels capped at 12)
-const DIFFICULTY_COUNTS = {
+// Fallback counts if course is not loaded
+const FALLBACK_COUNTS = {
     'All Levels': 12,
     'Easy': 7,
     'Medium': 7,
@@ -49,6 +49,14 @@ const PostTest = () => {
 
     if (!course) return <div className="error-state">Course not found.</div>;
 
+    const postQuestions = course.postTestQuestions || [];
+    const difficultyCounts = {
+        'All Levels': Math.min(30, postQuestions.length),
+        'Easy': postQuestions.filter(q => q.difficulty?.toLowerCase() === 'easy').length,
+        'Medium': postQuestions.filter(q => q.difficulty?.toLowerCase() === 'medium').length,
+        'Hard': postQuestions.filter(q => q.difficulty?.toLowerCase() === 'hard').length
+    };
+
     return (
         <div className="dashboard-container">
             <div className="assessment-prep-hero">
@@ -86,7 +94,7 @@ const PostTest = () => {
                     <div className="start-test-box">
                         <div className="test-meta">
                             <span className="q-count">
-                                {DIFFICULTY_COUNTS[difficulty]} Questions
+                                {difficultyCounts[difficulty] || 0} Questions
                                 {difficulty !== 'All Levels' && (
                                     <span style={{
                                         marginLeft: '0.5rem',
