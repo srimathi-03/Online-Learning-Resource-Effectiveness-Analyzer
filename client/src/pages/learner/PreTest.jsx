@@ -51,10 +51,17 @@ const PreTest = () => {
                     <Globe size={18} className="course-icon" />
                     <span className="course-name">{course.title}</span>
                 </div>
-                <p className="page-subtitle">Select difficulty level to begin your assessment.</p>
+                <p className="page-subtitle">Choose your preferred test mode to begin your assessment.</p>
             </header>
 
             <div className="refined-assessment-flow">
+
+                {/* Classic Mode Label */}
+                <div className="pretest-mode-section-label">
+                    <span className="mode-label-chip mode-classic">📋 Classic Mode</span>
+                    <p className="mode-label-desc">Choose a difficulty and answer all questions in that tier.</p>
+                </div>
+
                 {/* Difficulty Card */}
                 <div className="refined-card">
                     <h3>Select Difficulty</h3>
@@ -81,7 +88,7 @@ const PreTest = () => {
                     </div>
                 </div>
 
-                {/* Start Card */}
+                {/* Start Classic */}
                 <div className="refined-card-action">
                     <div className="questions-stat">
                         <span className="stat-label">
@@ -103,9 +110,40 @@ const PreTest = () => {
                         <span className="stat-number">{DIFFICULTY_COUNTS[difficulty]}</span>
                     </div>
                     <Link to={`/assessment?courseId=${course._id}&type=pre&difficulty=${difficulty.toLowerCase()}`} className="btn-primary-start-test">
-                        Start Test <ChevronRight size={18} />
+                        Start Classic Test <ChevronRight size={18} />
                     </Link>
                 </div>
+
+                {/* Adaptive Mode Label */}
+                <div className="pretest-mode-section-label" style={{ marginTop: '2.5rem' }}>
+                    <span className="mode-label-chip mode-adaptive">🎯 Smart Adaptive Mode</span>
+                    <p className="mode-label-desc">AI-powered test that adjusts difficulty in real-time — like GRE &amp; GMAT.</p>
+                </div>
+
+                {/* Adaptive Promo Card */}
+                <div className="adaptive-promo-card">
+                    <div className="adaptive-promo-left">
+                        <div className="adaptive-promo-icon-wrap">
+                            <span style={{ fontSize: '2rem' }}>🧠</span>
+                        </div>
+                        <div className="adaptive-promo-content">
+                            <h3 className="adaptive-promo-title">Smart Adaptive Test</h3>
+                            <p className="adaptive-promo-desc">
+                                The test adjusts <strong>harder or easier</strong> based on each answer you give.
+                                Only <strong>10 questions</strong> to accurately pinpoint your skill level.
+                            </p>
+                            <div className="adaptive-promo-tags">
+                                <span className="promo-tag">✓ GRE/GMAT-style IRT</span>
+                                <span className="promo-tag">✓ 10 questions only</span>
+                                <span className="promo-tag">✓ Live difficulty indicator</span>
+                            </div>
+                        </div>
+                    </div>
+                    <Link to={`/adaptive-test-intro?courseId=${course._id}`} className="btn-adaptive-promo">
+                        Learn More &amp; Start <ChevronRight size={18} />
+                    </Link>
+                </div>
+
             </div>
         </div>
     );

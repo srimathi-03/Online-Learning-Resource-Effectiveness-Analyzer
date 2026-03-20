@@ -146,6 +146,24 @@ const api = {
             headers: getAuthHeaders()
         });
         return res.json();
+    },
+
+    // Adaptive CAT endpoints
+    getAdaptiveNextQuestion: async (payload) => {
+        const res = await fetch(`${API_BASE_URL}/results/adaptive/next-question`, {
+            method: 'POST',
+            headers: getAuthHeaders(),
+            body: JSON.stringify(payload)
+        });
+        return res.json();
+    },
+    saveAdaptiveResult: async (payload) => {
+        const res = await fetch(`${API_BASE_URL}/results/adaptive/save`, {
+            method: 'POST',
+            headers: getAuthHeaders(),
+            body: JSON.stringify(payload)
+        });
+        return res.json();
     }
 };
 
