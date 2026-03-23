@@ -14,7 +14,10 @@ connectDB();
 
 // Middleware
 app.use(helmet()); // Secure HTTP headers
-app.use(cors());
+app.use(cors({
+  origin: "https://online-learning-resource-effectiven-mu.vercel.app",
+  credentials: true
+}));
 app.use(express.json());
 
 // Routes
