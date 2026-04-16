@@ -100,9 +100,29 @@ const Materials = () => {
                                 <span className="icon-wrapper-mini">{getMaterialIcon(item.type)}</span>
                                 <span className="duration-text">{item.duration}</span>
                             </div>
-                            <a href={item.url} target="_blank" rel="noreferrer" className="watch-btn-redesign">
-                                Open Source <ExternalLink size={14} />
-                            </a>
+                            <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                <button
+                                    onClick={() => navigate(`/material/${courseId}/${index}`)}
+                                    style={{
+                                        background: '#4F46E5',
+                                        color: '#FFF',
+                                        border: 'none',
+                                        padding: '0.5rem 0.75rem',
+                                        borderRadius: '6px',
+                                        cursor: 'pointer',
+                                        fontSize: '0.75rem',
+                                        fontWeight: '600',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '0.25rem'
+                                    }}
+                                >
+                                    Details
+                                </button>
+                                <a href={item.url} target="_blank" rel="noreferrer" className="watch-btn-redesign">
+                                    Open <ExternalLink size={14} />
+                                </a>
+                            </div>
                         </div>
                     </div>
                 ))}

@@ -133,6 +133,14 @@ const api = {
         });
         return res.json();
     },
+    updateCourseMaterials: async (courseId, materials) => {
+        const res = await fetch(`${API_BASE_URL}/courses/${courseId}/materials`, {
+            method: 'PUT',
+            headers: getAuthHeaders(),
+            body: JSON.stringify({ materials })
+        });
+        return res.json();
+    },
     addQuestion: async (courseId, data) => {
         const res = await fetch(`${API_BASE_URL}/courses/${courseId}/questions`, {
             method: 'POST',

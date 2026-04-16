@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Loader2, Trash2, BookOpen } from 'lucide-react';
+import { Loader2, Trash2, BookOpen, MoreHorizontal } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 
 const AdminCourseList = () => {
+    const navigate = useNavigate();
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -37,7 +39,7 @@ const AdminCourseList = () => {
 
     return (
         <div className="admin-course-list" style={{ padding: '2.5rem', background: '#F9FAFB', minHeight: '100%' }}>
-            <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+            <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
                 <header style={{ marginBottom: '2.5rem' }}>
                     <h1 style={{ fontSize: '2rem', fontWeight: '800', color: '#111827', marginBottom: '0.5rem' }}>Course Management</h1>
                     <p style={{ color: '#6B7280' }}>View and manage all available courses.</p>
@@ -63,16 +65,28 @@ const AdminCourseList = () => {
                                         <td style={{ padding: '1rem 0.75rem' }}>{course.totalQuestions || 0}</td>
                                         <td style={{ padding: '1rem 0.75rem' }}>{course.materials?.length || 0}</td>
                                         <td style={{ padding: '1rem 0.75rem' }}>
-                                            <button
-                                                onClick={() => handleDelete(course._id, course.title)}
-                                                style={{
-                                                    background: '#FEF2F2', color: '#DC2626', border: '1px solid #FECACA',
-                                                    padding: '0.5rem 1rem', borderRadius: '6px', cursor: 'pointer', fontWeight: '500',
-                                                    display: 'flex', alignItems: 'center', gap: '0.5rem'
-                                                }}
-                                            >
-                                                <Trash2 size={16} /> Delete
-                                            </button>
+                                            <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                                <button
+                                                    onClick={() => navigate(`/admin/detail-materials?courseId=${course._id}`)}
+                                                    style={{
+                                                        background: '#EEF2FF', color: '#4F46E5', border: '1px solid #C7D2FE',
+                                                        padding: '0.5rem 1rem', borderRadius: '6px', cursor: 'pointer', fontWeight: '500',
+                                                        fontSize: '0.85rem'
+                                                    }}
+                                                >
+                                                    Materials {(course.materials?.length || 0) > 0 && `(${course.materials.length})`}
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDelete(course._id, course.title)}
+                                                    style={{
+                                                        background: '#FEF2F2', color: '#DC2626', border: '1px solid #FECACA',
+                                                        padding: '0.5rem 1rem', borderRadius: '6px', cursor: 'pointer', fontWeight: '500',
+                                                        display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem'
+                                                    }}
+                                                >
+                                                    <Trash2 size={16} /> Delete
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))}

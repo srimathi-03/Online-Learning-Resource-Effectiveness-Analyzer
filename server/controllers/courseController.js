@@ -43,6 +43,20 @@ exports.addMaterial = async (req, res) => {
     }
 };
 
+exports.updateMaterials = async (req, res) => {
+    try {
+        const { materials } = req.body;
+        const course = await Course.findById(req.params.id);
+        if (!course) return res.status(404).json({ message: 'Course not found' });
+
+        course.materials = materials;
+        await course.save();
+        res.json({ message: 'Materials updated successfully', materials: course.materials });
+    } catch (err) {
+        res.status(500).json({ message: 'Server error', error: err.message });
+    }
+};
+
 exports.addQuestion = async (req, res) => {
     try {
         const { testType, question, options, correctAnswer, difficulty, topic } = req.body;

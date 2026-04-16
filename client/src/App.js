@@ -9,6 +9,7 @@ import PreTest from './pages/learner/PreTest';
 import PreTestResults from './pages/learner/PreTestResults';
 import PreTestRecommendations from './pages/learner/PreTestRecommendations';
 import Materials from './pages/learner/Materials';
+import MaterialDetail from './pages/learner/MaterialDetail';
 import PostTest from './pages/learner/PostTest';
 import Results from './pages/learner/Results';
 import AllRecommendations from './pages/learner/AllRecommendations';
@@ -19,6 +20,7 @@ import AdminCourseList from './pages/admin/AdminCourseList';
 import AdminCreateAssessment from './pages/admin/AdminCreateAssessment';
 import AdminAddMaterial from './pages/admin/AdminAddMaterial';
 import AdminCreateCourse from './pages/admin/AdminCreateCourse';
+import AdminDetailMaterials from './pages/admin/AdminDetailMaterials';
 import PostTestResults from './pages/learner/PostTestResults';
 import ForgotPassword from './pages/ForgotPassword';
 import RequireAdmin from './components/RequireAdmin';
@@ -44,6 +46,7 @@ function App() {
           <Route path="/pre-test-recommendations" element={<PreTestRecommendations />} />
           <Route path="/assessment" element={<Assessment />} />
           <Route path="/materials" element={<Materials />} />
+          <Route path="/material/:courseId/:materialIndex" element={<MaterialDetail />} />
           <Route path="/post-test" element={<PostTest />} />
           <Route path="/post-test-results" element={<PostTestResults />} />
           <Route path="/results" element={<Results />} />
@@ -54,6 +57,7 @@ function App() {
             <Route path="/admin/courses" element={<AdminCourseList />} />
             <Route path="/admin/create-course" element={<AdminCreateCourse />} />
             <Route path="/admin/add-material" element={<AdminAddMaterial />} />
+            <Route path="/admin/detail-materials" element={<AdminDetailMaterials />} />
             <Route path="/admin/create-assessment" element={<AdminCreateAssessment />} />
           </Route>
         </Route>

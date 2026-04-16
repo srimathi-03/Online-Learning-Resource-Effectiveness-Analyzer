@@ -12,6 +12,7 @@ router.get('/:id/materials-by-level', courseController.getMaterialsByLevel);
 router.post('/', protect, courseController.createCourse);
 router.delete('/:id', protect, courseController.deleteCourse);
 router.post('/:id/materials', protect, courseController.addMaterial);
+router.put('/:id/materials', protect, courseController.updateMaterials);
 router.post('/:id/questions', protect, courseController.addQuestion);
 router.post('/:id/select-level', protect, courseController.selectKnowledgeLevel);
 
