@@ -355,6 +355,8 @@ const seed = async () => {
         // Seed default users
         const defaultUsers = [
             { fullName: 'Admin User', email: 'admin@admin.com', password: 'admin', role: 'admin', isNewUser: false },
+            { fullName: 'Srimathi Admin', email: 'srimathi@admin.com', password: 'admin123', role: 'admin', isNewUser: false },
+            { fullName: 'Super Admin', email: 'superadmin@admin.com', password: 'superadmin123', role: 'admin', isNewUser: false },
             { fullName: 'Sample Learner', email: 'learner@learner.com', password: 'learner', role: 'learner', isNewUser: false }
         ];
         for (const userData of defaultUsers) {
