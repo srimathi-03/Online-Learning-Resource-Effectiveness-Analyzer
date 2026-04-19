@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:5001/api';
+const API_BASE_URL = 'https://online-learning-resource-effectiveness.onrender.com/api';
 
 // Helper: get Authorization header with stored JWT token
 const getAuthHeaders = () => {
